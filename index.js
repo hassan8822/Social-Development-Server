@@ -23,6 +23,10 @@ async function run() {
     await client.connect();
     const db = client.db('Social_User')
     const eventsCollection = db.collection('events')
+    const joinedEventsCollection =db.collection('joinedEvents')
+
+
+    // events
 
     app.get("/events", async(req, res) => {
         
@@ -32,7 +36,6 @@ async function run() {
 
     app.get("/events/:id", async (req, res) => {
   const id = req.params.id;
-
   const event = await eventsCollection.findOne({
     _id: new ObjectId(id),
   });
@@ -46,6 +49,22 @@ async function run() {
       const result = await eventsCollection.insertOne(eventData);
       res.send(result)
 
+    })
+
+    // joined events
+
+
+    app.get("/joinedEvents/:email", async(req, res) =>{
+      const email = req.params.email;
+      const result = await joinedEventsCollection.find({userEmail: email})
+      .sort({eventDate: 1}).toArray();
+      res.send(result);
+    })
+
+    app.post("/joinedEvents", async(req, res) => {
+      const joinedEvent = req.body;
+      const result = await  joinedEventsCollection.insertOne(joinedEvent);
+      res.send(result)
     })
 
 
