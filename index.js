@@ -67,6 +67,18 @@ async function run() {
       res.send(result)
     })
 
+    // manageevnts
+    app.get("/myevents/:email", async (req, res) => {
+  const email = req.params.email;
+
+  const result = await eventsCollection
+    .find({ createdBy: email })
+    .sort({ eventDate: 1 })
+    .toArray();
+
+  res.send(result);
+});
+
 
 
 
