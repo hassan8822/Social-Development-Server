@@ -89,7 +89,23 @@ app.delete("/events/:id", async (req, res) => {
   res.send(result);
 });
 
+// Update events
+app.put("/events/:id", async (req, res) => {
+ 
 
+  const id = req.params.id;
+  const updatedEvent = req.body;
+
+  const filter = { _id: new ObjectId(id) };
+
+  const updateDoc = {
+    $set: updatedEvent,
+  };
+
+  const result = await eventsCollection.updateOne(filter, updateDoc);
+
+  res.send(result);
+});
 
 
 
